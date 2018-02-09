@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PheonixSelector.Views.CategoryPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Frame
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                OutlineColor="Silver"
+                Margin="10,10,10,10">
+                <ListView
+                    ItemsSource="{Binding CategoryList}"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    >
+                </ListView>
+            </Frame>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>   
+                <Button
+                    Text="Delete"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Command="{Binding Btn_DelClick}"/>
+                <Button
+                    Text="Add"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Command="{Binding Btn_AddClick}"/>
+                <Button
+                    Text="Return"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Command="{Binding Btn_RtnClick}"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

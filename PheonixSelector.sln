@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PheonixSelector.Android", "PheonixSelector\PheonixSelector.Android\PheonixSelector.Android.csproj", "{DE2C6874-230F-45B5-90A3-A237128E4112}"
 EndProject
@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PheonixSelector.iOS", "Pheo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PheonixSelector.UWP", "PheonixSelector\PheonixSelector.UWP\PheonixSelector.UWP.csproj", "{7B022C6D-F9F3-46CF-B5E8-AC7EF5B4D9F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PheonixSelector", "PheonixSelector\PheonixSelector\PheonixSelector.csproj", "{AD1458AB-BA95-4147-A34C-0205FE3F44D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PheonixSelector", "PheonixSelector\PheonixSelector\PheonixSelector.csproj", "{AD1458AB-BA95-4147-A34C-0205FE3F44D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

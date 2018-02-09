@@ -13,7 +13,7 @@ namespace PheonixSelector
 		{
 			InitializeComponent();
 
-			MainPage = new PheonixSelector.MainPage();
+			MainPage = new NavigationPage(new Views.MainPage());
 		}
 
 		protected override void OnStart ()

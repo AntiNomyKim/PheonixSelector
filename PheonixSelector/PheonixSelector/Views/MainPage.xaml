@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PheonixSelector.Views.MainPage"
+             Title="MainPage">
+    <ContentPage.Content>
+        <StackLayout
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+            <Frame
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="Fill"
+                Margin="10, 10, 10, 0"
+                OutlineColor="Silver">
+                <Label 
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding SelectedCategoryName}"/>
+            </Frame>
+            <Frame
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand" 
+                Margin="10, 0, 10, 0"
+                OutlineColor = "Silver">
+                <Label 
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding SelectedItemName}"/>
+            </Frame>
+            <StackLayout
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                >
+                <Button 
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="Center"
+                    Text="Run!"
+                    Command="{Binding Click_BtnRun}"/>
+
+                <Grid HorizontalOptions="FillAndExpand"
+                      VerticalOptions="Fill">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button 
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="Fill"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Text="CategoryList"
+                        Command="{Binding Click_BtnCategoryList}"/>
+                    <Button 
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="Fill"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="ItemList"
+                        Command="{Binding Click_BtnItemList}"/>
+                </Grid>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
