@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PheonixSelector.Views.MainPage"
-             Title="MainPage">
+             Title="선택도우미 by 박민연">
     <ContentPage.Content>
         <StackLayout
             HorizontalOptions="FillAndExpand"
@@ -23,6 +23,8 @@
                 OutlineColor = "Silver">
                 <Label 
                     HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    FontSize="Large"
                     Text="{Binding SelectedItemName}"/>
             </Frame>
             <StackLayout

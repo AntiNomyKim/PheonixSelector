@@ -12,16 +12,17 @@ namespace PheonixSelector.ViewModels
 {
     class MainPageViewModel : INotifyPropertyChanged
     {
-        private Category selectedCategory;
-        private Item selectedItem;
-        private ContentPage page;
-        private Item cheatedItem;
-
         public MainPageViewModel(ContentPage page)
         {
             this.page = page;
             cheatedItem = null;
+            selectedCategory = null;
         }
+
+        private Category selectedCategory;
+        private Item selectedItem;
+        private ContentPage page;
+        private Item cheatedItem;
 
         public string SelectedCategoryName
         {
@@ -29,14 +30,13 @@ namespace PheonixSelector.ViewModels
             {
                 if (selectedCategory == null)
                 {
-                    return "Selected Category Name";
+                    return "Select Category";
                 }
                 return selectedCategory.CategoryName;
             }
 
             set
             {
-                SelectedCategoryName = value;
                 OnPropertyChanged(nameof(SelectedCategoryName));
             }
         }
@@ -46,14 +46,13 @@ namespace PheonixSelector.ViewModels
             {
                 if (selectedCategory == null)
                 {
-                    return "Selected Item Name";
+                    return "Select Item";
                 }
 
                 return selectedItem.ItemName; 
             }
             set
             {
-                SelectedItemName = value;
                 OnPropertyChanged(nameof(SelectedItemName));
             }
         }
@@ -63,10 +62,24 @@ namespace PheonixSelector.ViewModels
         {
             get
             {
-                return new Command(() =>
+                return new Command(async () =>
                 {
                     selectedItem = GetRandomItem();
-                    SelectedItemName = selectedItem.ItemName;
+                    if (selectedItem != null)
+                    {
+                        SelectedItemName = selectedItem.ItemName;
+                    }
+                    else
+                    {
+                        if (selectedCategory == null)
+                        {
+                            await page.DisplayAlert("Warning", "Select Category First", "OK");
+                        }
+                        else
+                        {
+                            await page.DisplayAlert("Warning", "No Items. Check Item List", "OK");
+                        }
+                    }
                     cheatedItem = null;
                 });
             }
@@ -79,6 +92,13 @@ namespace PheonixSelector.ViewModels
                 return new Command(async () =>
                 {
                     var categoryPage = new CategoryPage();
+                    categoryPage.Disappearing += (s, e) =>
+                    {
+                        selectedCategory = (categoryPage.BindingContext as CategoryPageViewModel).SelectedCategory;
+
+                        SelectedCategoryName = (selectedCategory != null) ? selectedCategory.CategoryName : string.Empty;
+                    };
+
                     await page.Navigation.PushModalAsync(categoryPage);
                 });
             }
@@ -88,9 +108,20 @@ namespace PheonixSelector.ViewModels
         {
             get
             {
-                return new Command(() =>
+                return new Command(async () =>
                 {
-                    page.DisplayAlert("", "BTN_Item CLICKED", "Cancel");
+                    if (selectedCategory == null)
+                    {
+                        await page.DisplayAlert("Warning", "Select Category First", "OK");
+                        return;
+                    }
+                    var itemPage = new ItemPage(selectedCategory);
+                    itemPage.Disappearing += (s, e) =>
+                    {
+                        selectedCategory.ItemList = (itemPage.BindingContext as ItemPageViewModel).ItemList;
+                    };
+
+                    await page.Navigation.PushModalAsync(itemPage);
                 });
             }
         }
@@ -98,37 +129,15 @@ namespace PheonixSelector.ViewModels
 
 
         #region [사용자정의 메소드]
-        //미사용
-        private Item GetSelectedItem(string itemName)
-        {
-            Item item = null;
-            if (selectedCategory != null)
-            {
-                IEnumerable<Item> items = selectedCategory.ItemList.Where((x) => x.ItemName.Equals(itemName));
-                if (items.Count() > 0)
-                {
-                    var i = 0;
-                    if (items.Count() > 1)
-                    {
-                        //조회한 아이템 이름이 중복되는 경우의 처리
-                    }
-                    item = items.ToList()[i];
-                }
-            }
-
-            return item;
-        }
-        //미사용
-        private Category GetCategorybyName(string categoryName)
-        {
-            Category category = null;
-            
-            return category;
-        }
-         
         private Item GetRandomItem()
         {
+            if (selectedCategory == null || selectedCategory.ItemList == null)
+            {
+                return null;
+            }
+
             var r = new Random(DateTime.Now.TimeOfDay.Seconds);
+
             List<Item> Items = selectedCategory.ItemList;
 
             //확률상승의 경우 50% 확률로 선택된 아이템을 출현

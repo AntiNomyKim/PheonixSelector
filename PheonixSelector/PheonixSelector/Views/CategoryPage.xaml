@@ -10,10 +10,28 @@
                 OutlineColor="Silver"
                 Margin="10,10,10,10">
                 <ListView
+                    x:Name="ListView_Category"
                     ItemsSource="{Binding CategoryList}"
+                    SelectedItem="{Binding SelectedCategory}"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
                     >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout 
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand">
+                                    <Label
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="Start"
+                                        Text="{Binding CategoryName}"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
             </Frame>
             <Grid>

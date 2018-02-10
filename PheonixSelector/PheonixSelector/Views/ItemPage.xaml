@@ -4,9 +4,66 @@
              x:Class="PheonixSelector.Views.ItemPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Frame
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                OutlineColor="Silver"
+                Margin="10,10,10,10">
+                <Label 
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding SelectedCategoryName}"/>
+            </Frame>
+            <Frame
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                OutlineColor="Silver"
+                Margin="10,10,10,10">
+                <ListView
+                    ItemsSource="{Binding ItemList}"
+                    SelectedItem="{Binding SelectedItem}"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout 
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand">
+                                    <Label
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="Start"
+                                        Text="{Binding ItemName}"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Frame>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button
+                    Text="Delete"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Command="{Binding Btn_DelClick}"/>
+                <Button
+                    Text="Add"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Command="{Binding Btn_AddClick}"/>
+                <Button
+                    Text="Return"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Command="{Binding Btn_RtnClick}"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

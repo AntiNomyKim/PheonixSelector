@@ -1,4 +1,4 @@
-﻿using PheonixSelector.Models;
+﻿using PheonixSelector.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +11,12 @@ using Xamarin.Forms.Xaml;
 namespace PheonixSelector.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ItemPage : ContentPage
+	public partial class InputDialog : ContentPage
 	{
-        private Category selectedCategory;
-
-		public ItemPage (Category category)
+		public InputDialog ()
 		{
 			InitializeComponent ();
-            BindingContext = new ViewModels.ItemPageViewModel(this, category);
+            BindingContext = new InputDialogViewModel(this);
 		}
 	}
 }
