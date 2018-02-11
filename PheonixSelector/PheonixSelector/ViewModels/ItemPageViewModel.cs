@@ -64,7 +64,7 @@ namespace PheonixSelector.ViewModels
 
         #region [Commands]
 
-        public Command Btn_DelClick
+        public Command Click_BtnDel
         {
             get
             {
@@ -81,7 +81,7 @@ namespace PheonixSelector.ViewModels
             }
         }
 
-        public Command Btn_AddClick
+        public Command Click_BtnAdd
         {
             get
             {
@@ -127,7 +127,7 @@ namespace PheonixSelector.ViewModels
             }
         }
 
-        public Command Btn_RtnClick
+        public Command Click_BtnRtn
         {
             get
             {

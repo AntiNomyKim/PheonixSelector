@@ -54,17 +54,17 @@
                     Text="Delete"
                     Grid.Row="0"
                     Grid.Column="0"
-                    Command="{Binding Btn_DelClick}"/>
+                    Command="{Binding Click_BtnDel}"/>
                 <Button
                     Text="Add"
                     Grid.Row="0"
                     Grid.Column="1"
-                    Command="{Binding Btn_AddClick}"/>
+                    Command="{Binding Click_BtnAdd}"/>
                 <Button
                     Text="Return"
                     Grid.Row="0"
                     Grid.Column="2"
-                    Command="{Binding Btn_RtnClick}"/>
+                    Command="{Binding Click_BtnRtn}"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>
