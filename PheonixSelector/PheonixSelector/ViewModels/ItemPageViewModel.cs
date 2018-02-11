@@ -16,13 +16,14 @@ namespace PheonixSelector.ViewModels
             this.selectedCategory = selectedCategory;
             SelectedCategoryName = this.selectedCategory == null ? string.Empty : this.selectedCategory.CategoryName;
             ItemList = GetItemList(selectedCategory.CategoryCode);
+            CheatedItem = null;
         }
 
         private ContentPage page;
         private Category selectedCategory;
         private Item selectedItem;
         private List<Item> itemList;
-        
+
         public string SelectedCategoryName
         {
             get
@@ -58,6 +59,7 @@ namespace PheonixSelector.ViewModels
                 OnPropertyChanged(nameof(ItemList));
             }
         }
+        
         public Item CheatedItem { get; set; }
 
         #region [Commands]
@@ -132,6 +134,17 @@ namespace PheonixSelector.ViewModels
                 return new Command(() =>
                 {
                     page.Navigation.PopModalAsync();
+                });
+            }
+        }
+
+        public Command ActivateCheating
+        {
+            get
+            {
+                return new Command((s) =>
+                {
+                    CheatedItem = SelectedItem;
                 });
             }
         }

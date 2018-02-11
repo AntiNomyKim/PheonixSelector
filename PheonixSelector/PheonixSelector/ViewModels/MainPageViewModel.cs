@@ -102,6 +102,8 @@ namespace PheonixSelector.ViewModels
                             await page.DisplayAlert("Warning", "No Items. Check Item List", "OK");
                         }
                     }
+
+                    //동작이 완료된뒤, cheat아이템 리셋
                     cheatedItem = null;
                 });
             }
@@ -145,6 +147,7 @@ namespace PheonixSelector.ViewModels
                     var itemPage = new ItemPage(selectedCategory);
                     itemPage.Disappearing += (s, e) =>
                     {
+                        cheatedItem = (itemPage.BindingContext as ItemPageViewModel).CheatedItem;
                         itemList = Database.GetItemListNotDoneAsync(selectedCategory.CategoryCode).Result;
                     };
 
@@ -188,18 +191,23 @@ namespace PheonixSelector.ViewModels
                 return null;
             }
 
-            //확률상승의 경우 50% 확률로 선택된 아이템을 출현
+            //CheatingItem이 있는경우 85%확률로 해당아이템 당첨
             if (cheatedItem != null)
             {
-                if (Convert.ToInt16(r.Next() % 2) == 0)
+                var diceRoll = r.Next() % 100;
+                
+                if (diceRoll <= 85)
                 {
                     return cheatedItem;
                 }
+                else
+                {
+                    Items.Remove(cheatedItem);
+                    return Items[Convert.ToInt16(r.Next() % Items.Count)];
+                }
             }
 
-            int idx = Convert.ToInt16(r.Next() % Items.Count);
-
-            return Items[idx];
+            return Items[Convert.ToInt16(r.Next() % Items.Count)];
         }
 
         #endregion [사용자정의 메소드]
