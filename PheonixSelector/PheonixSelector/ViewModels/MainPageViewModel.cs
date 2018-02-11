@@ -1,4 +1,5 @@
-﻿using PheonixSelector.Models;
+﻿using PheonixSelector.Interfaces;
+using PheonixSelector.Models;
 using PheonixSelector.Views;
 using System;
 using System.Collections.Generic;
@@ -12,16 +13,36 @@ namespace PheonixSelector.ViewModels
 {
     class MainPageViewModel : INotifyPropertyChanged
     {
+        #region [LocalSQLite]
+
+        static SQLiteHelper db;
+        public static SQLiteHelper Database
+        {
+            get
+            {
+                if (db == null)
+                {
+                    db = new SQLiteHelper(DependencyService.Get<ILocalFileHelper>().GetLocalFilePath("Selector.db3"));
+                }
+
+                return db;
+            }
+        }
+
+        #endregion [LocalSQLite]
+
         public MainPageViewModel(ContentPage page)
         {
             this.page = page;
             cheatedItem = null;
             selectedCategory = null;
+            itemList = null;
         }
 
         private Category selectedCategory;
-        private Item selectedItem;
         private ContentPage page;
+        private List<Item> itemList;
+        private Item selectedItem;
         private Item cheatedItem;
 
         public string SelectedCategoryName
@@ -46,7 +67,7 @@ namespace PheonixSelector.ViewModels
             {
                 if (selectedCategory == null)
                 {
-                    return "Select Item";
+                    return "? ? ?";
                 }
 
                 return selectedItem.ItemName; 
@@ -58,6 +79,7 @@ namespace PheonixSelector.ViewModels
         }
 
         #region [Commands]
+
         public Command Click_BtnRun
         {
             get
@@ -91,6 +113,11 @@ namespace PheonixSelector.ViewModels
             {
                 return new Command(async () =>
                 {
+                    selectedCategory     = null;
+                    selectedItem         = null;
+                    SelectedCategoryName = string.Empty;
+                    SelectedItemName     = string.Empty;
+
                     var categoryPage = new CategoryPage();
                     categoryPage.Disappearing += (s, e) =>
                     {
@@ -118,44 +145,15 @@ namespace PheonixSelector.ViewModels
                     var itemPage = new ItemPage(selectedCategory);
                     itemPage.Disappearing += (s, e) =>
                     {
-                        selectedCategory.ItemList = (itemPage.BindingContext as ItemPageViewModel).ItemList;
+                        itemList = Database.GetItemListNotDoneAsync(selectedCategory.CategoryCode).Result;
                     };
 
                     await page.Navigation.PushModalAsync(itemPage);
                 });
             }
         }
+
         #endregion [Commands]
-
-
-        #region [사용자정의 메소드]
-        private Item GetRandomItem()
-        {
-            if (selectedCategory == null || selectedCategory.ItemList == null)
-            {
-                return null;
-            }
-
-            var r = new Random(DateTime.Now.TimeOfDay.Seconds);
-
-            List<Item> Items = selectedCategory.ItemList;
-
-            //확률상승의 경우 50% 확률로 선택된 아이템을 출현
-            if (cheatedItem != null)
-            {
-                if(Convert.ToInt16(r.Next() % 2) == 0)
-                {
-                    return cheatedItem;
-                }
-            }
-            
-            int idx = Convert.ToInt16(r.Next() % Items.Count);
-
-            return Items[idx];
-        }
-
-        #endregion [사용자정의 메소드]
-
 
         #region [INotifyPropertyChanged 구현]
         public event PropertyChangedEventHandler PropertyChanged;
@@ -170,5 +168,41 @@ namespace PheonixSelector.ViewModels
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion [INotifyPropertyChanged 구현]
+
+        #region [사용자정의 메소드]
+
+        private Item GetRandomItem()
+        {
+            if (selectedCategory == null)
+            {
+                return null;
+            }
+
+            var r = new Random(DateTime.Now.TimeOfDay.Seconds);
+
+            List<Item> Items = Database.GetItemListNotDoneAsync(selectedCategory.CategoryCode).Result;
+
+            //아이템이 없는 경우에는 중단
+            if (Items.Count <= 0)
+            {
+                return null;
+            }
+
+            //확률상승의 경우 50% 확률로 선택된 아이템을 출현
+            if (cheatedItem != null)
+            {
+                if (Convert.ToInt16(r.Next() % 2) == 0)
+                {
+                    return cheatedItem;
+                }
+            }
+
+            int idx = Convert.ToInt16(r.Next() % Items.Count);
+
+            return Items[idx];
+        }
+
+        #endregion [사용자정의 메소드]
+
     }
 }

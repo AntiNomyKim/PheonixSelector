@@ -1,4 +1,5 @@
-﻿using PheonixSelector.Models;
+﻿using PheonixSelector.Interfaces;
+using PheonixSelector.Models;
 using PheonixSelector.Views;
 using System;
 using System.Collections.Generic;
@@ -14,23 +15,7 @@ namespace PheonixSelector.ViewModels
         {
             this.page = page;
 
-            //TODO Local 저장 되는대로 삭제할것
-            var test = new List<Category>()
-            {
-                new Category()
-                {
-                    CategoryCode = "0",
-                    CategoryName = "test1",
-                    ItemList = null
-                },
-                new Category()
-                {
-                    CategoryCode = "1",
-                    CategoryName = "test2",
-                    ItemList = null
-                }
-            };
-            CategoryList = test;
+            LoadDataFromSQLite();
         }
 
         private ContentPage page;
@@ -63,18 +48,24 @@ namespace PheonixSelector.ViewModels
         }
 
         #region [Commands]
+
         public Command Btn_DelClick
         {
             get
             {
                 return new Command(() =>
                 {
+                    //UI상에서 삭제
                     var list = new List<Category>(CategoryList);
                     list.Remove(SelectedCategory);
                     CategoryList = list;
+
+                    //SQLite 삭제
+                    MainPageViewModel.Database.DeleteCategoryAsync(SelectedCategory);
                 });
             }
         }
+
         public Command Btn_AddClick
         {
             get
@@ -90,13 +81,8 @@ namespace PheonixSelector.ViewModels
                     //팝업이 닫히고 난뒤 입력값의 처리
                     nameDialog.Disappearing += (s, e) =>
                     {
-                        var code = "0";
+                        var code = MainPageViewModel.Database.GetMaximumCategoryCode();
                         var name = string.Empty;
-
-                        if (CategoryList.Count != 0)
-                        {
-                            code = CategoryList.Count.ToString();
-                        }
 
                         name = (nameDialog.BindingContext as InputDialogViewModel).Entry_Name;
 
@@ -106,22 +92,25 @@ namespace PheonixSelector.ViewModels
                             return;
                         }
 
-                        var list = new List<Category>(CategoryList);
-
-                        list.Add(new Category()
+                        var newCategory = new Category()
                         {
                             CategoryCode = code,
                             CategoryName = name,
-                            ItemList = null
-                        });
+                        };
 
+                        var list = new List<Category>(CategoryList);
+                        list.Add(newCategory);
                         CategoryList = list;
+
+                        //SQLite저장
+                        MainPageViewModel.Database.SaveCategoryAsync(newCategory);
                     };
 
                     await page.Navigation.PushModalAsync(nameDialog);
                 });
             }
         }
+
         public Command Btn_RtnClick
         {
             get
@@ -132,6 +121,7 @@ namespace PheonixSelector.ViewModels
                 });
             }
         }
+
         #endregion [Commands]
 
         #region [INotyfyPropertyChanged]
@@ -145,5 +135,12 @@ namespace PheonixSelector.ViewModels
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion [INotyfyPropertyChanged]
+
+        #region [사용자정의 메소드]
+        private void LoadDataFromSQLite()
+        {
+            CategoryList = MainPageViewModel.Database.GetCategoryListAsync().Result;
+        }
+        #endregion [사용자정의 메소드]
     }
 }
