@@ -1,6 +1,5 @@
 ﻿using PheonixSelector.Interfaces;
 using PheonixSelector.UWP;
-using System;
 using System.IO;
 using Windows.Storage;
 using Xamarin.Forms;
